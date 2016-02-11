@@ -1,8 +1,6 @@
 // Example express application adding the parse-server module to expose Parse
 // compatible API routes.
 
-console.log('state 0');
-
 var express = require('express');
 var ParseServer = require('parse-server').ParseServer;
 
@@ -12,27 +10,24 @@ if (!databaseUri) {
   console.log('DATABASE_URI not specified, falling back to localhost.');
 }
 
-console.log('state 1');
-
 var api = new ParseServer({
   databaseURI: databaseUri || 'mongodb://localhost:27017/dev',
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
   appId: process.env.APP_ID || 'HmmflFetTtzyLu6K4TIWCh9JKYGRAa0q0UqhY0Di',
+  clientKey: process.env.CLIENT_KEY || '6P2rNmCVisjTV5lhOLLfeO9wXEKgUgzH1TtICC7P',
+  restAPIKey: process.env.REST_KEY || 'qzKAArQUeQS9UGI79mrvG9uelF2plBAyjWkj3DJH',
+  javascriptKey: process.env.JS_KEY || 'nZOorWfHGUwxfq9GT6X0rtyv3K0gbo44ZDxI62yS',
   masterKey: process.env.MASTER_KEY || 'A78ULyJvqShKZEgznZwAHVm73IVntwFTh1RISV7l' //Add your master key here. Keep it secret!
 });
 // Client-keys like the javascript key or the .NET key are not necessary with parse-server
 // If you wish you require them, you can set them as options in the initialization above:
 // javascriptKey, restAPIKey, dotNetKey, clientKey
 
-console.log('state 2');
-
 var app = express();
 
 // Serve the Parse API on the /parse URL prefix
 var mountPath = process.env.PARSE_MOUNT || '/parse';
 app.use(mountPath, api);
-
-console.log('state 3');
 
 // Parse Server plays nicely with the rest of your web routes
 app.get('/', function(req, res) {
